@@ -20,10 +20,15 @@ function prediction() {
       if (this.readyState == 4 && this.status == 200) {
         var response = JSON.parse(xhr.responseText);
         console.log(response);
-        if(response.status.statusMessage=="novalue"){
+        if(response.status.statusMessage=="novalue")
+        {
           console.log("Function called");
           newusers(username);
-        }else{
+        }
+        else
+        {
+          console.log(response.data)
+          console.log("hello budddyyyyyy")
           getmoviedata(response.data,username)
         }
       }
@@ -32,28 +37,27 @@ function prediction() {
       "username":username
     }));
   }
-  // else if(this.status==400){
-  //   pred_random(username)
-  // }
 
-//   function pred_random(){
-//       var xhr = new XMLHttpRequest();
-//       xhr.open("POST", "http://localhost:5000/api/pred_rat");
-//       xhr.setRequestHeader("Content-Type", "application/json");
-//       xhr.onreadystatechange = function() {
-//         if (this.readyState == 4 && this.status == 200) {
-//           var response = JSON.parse(xhr.responseText);
-//           console.log(response);
-//           getmoviedata(response.data,username)
-//       };
-//       xhr.send(JSON.stringify({
-//         "username":"Vijay"
-//       }));
+
+//   function prediction2(username){
+
+//     console.log(username);
+//     var xhr = new XMLHttpRequest();
+//     xhr.open("POST", "http://localhost:5000/api/pred_rat2");
+//     xhr.setRequestHeader("Content-Type", "application/json");
+//     xhr.onreadystatechange = function() {
+//       if (this.readyState == 4 && this.status == 200) {
+//         var response = JSON.parse(xhr.responseText);
+//         console.log(response);
+//         getmoviedata(response.data,username)
 //   }
 // }
-
+//   }
 
 async function getmoviedata(response,username){
+  console.log(username);
+  console.log("--------------------sadfs--------------");
+  console.log(response);
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://localhost:5000/api/getdata");
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -66,7 +70,6 @@ async function getmoviedata(response,username){
       }
   };
   xhr.send(JSON.stringify(response));
-
 }    
 
 
@@ -156,7 +159,7 @@ for (let i = 0; i < movies.length; i++) {
     });
 }
 }
-window.onload = prediction;
+window.onload = prediction();
 
 function InsertRating(id,rating,username){
   console.log(username+"dahjisdifasifsagfgg");
@@ -173,11 +176,11 @@ function InsertRating(id,rating,username){
             console.log("success");
         }
         else{
+          console.log(response)
             alert("rated");
         }
     }
-            
-    };
+  }
     xhr.send(JSON.stringify({
       "name":username,
        "id":id,

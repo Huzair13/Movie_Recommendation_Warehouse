@@ -406,18 +406,20 @@ def project_api_routes(endpoints):
             resp['status']=status
             return resp
 
-    @endpoints.route('/pred_rat',methods=['post'])
-    def pred_rat():
+    @endpoints.route('/pred_rat2',methods=['post'])
+    def pred_rat2():
         resp = {}
         try:
             # username = request.args.get('username')
             username =request.json['username']
             print(username)
+            print("Here I got the username without error")
 
             document = users.find_one({"name": username})
             keys_to_remove = {"_id","name", "email","password"}
             result = [(key, float(value)) for key, value in document.items() if key not in keys_to_remove]
             print(result)
+            print("Here I got the user rating correctly")
 
             rating=pd.read_csv('ratings_small.csv')
             rating.rename(columns={'movieId': 'id'}, inplace=True)
@@ -428,16 +430,28 @@ def project_api_routes(endpoints):
             corrMatrix = userRatings.corr(method='pearson')
             # data = [("1007",5),("100",3),("1009",1),("110102",2)]
             print(result)
+            print("Here I printed the rating correctly")
 
             rated_movies = result
             rated_df = pd.DataFrame(rated_movies, columns=['id', 'rating'])
+            print(rated_df)
+            print("csv file")
             rated_df = rated_df.set_index('id')
+            print(rated_df)
+            print("Index is set")
+
             similar_movies = pd.DataFrame()
+
+            print(similar_movies)
+
+            print("dataframe")
             for movie,rating in rated_movies:
                 similar_movies = similar_movies.append(get_similar(movie,rating,corrMatrix),ignore_index = True)
 
             similar_movies = similar_movies.sum().sort_values(ascending=False)
+            print("Heyyyy")
             print(similar_movies)
+            print("Here i found the similar movies")
             print("------------------------------------")
             similar_movies = similar_movies.loc[~(similar_movies.index).isin(rated_df.index)]
             print(similar_movies)
@@ -448,6 +462,91 @@ def project_api_routes(endpoints):
             similar_movies_json = json.dumps(similar_movies_dict)
             similar = json.loads(similar_movies_json)
             print(similar)
+            print("Here similar is printed")
+
+            resp["data"]=similar
+
+            status={
+                "statusCode":"200",
+                "statusMessage":"success"
+            }
+            if(resp["data"]=={}):
+                status={
+                    "statusCode":"200",
+                    "statusMessage":"novalue"
+                }
+            print(status)
+            resp["status"] =status
+            print(resp)
+            print("hidszkjasdaf")
+            return resp
+
+        except Exception as e:
+            print(e)
+            status = {
+                "statusCode":"400",
+                "statusMessage":str(e)
+            }
+            resp["status"] =status
+            return resp
+
+    @endpoints.route('/pred_rat',methods=['post'])
+    def pred_rat():
+        resp = {}
+        try:
+            # username = request.args.get('username')
+            username =request.json['username']
+            print(username)
+            print("Here I got the username without error")
+
+            document = users.find_one({"name": username})
+            keys_to_remove = {"_id","name", "email","password"}
+            result = [(key, float(value)) for key, value in document.items() if key not in keys_to_remove]
+            print(result)
+            print("Here I got the user rating correctly")
+
+            rating=pd.read_csv('ratings_small.csv')
+            rating.rename(columns={'movieId': 'id'}, inplace=True)
+            rating['id']=rating['id'].astype(str)
+            userRatings = rating.pivot_table(index=['userId'],columns=['id'],values='rating')
+            userRatings.head()
+            userRatings = userRatings.dropna(thresh=10, axis=1).fillna(0,axis=1)
+            corrMatrix = userRatings.corr(method='pearson')
+            # data = [("1007",5),("100",3),("1009",1),("110102",2)]
+            print(result)
+            print("Here I printed the rating correctly")
+
+            rated_movies = result
+            rated_df = pd.DataFrame(rated_movies, columns=['id', 'rating'])
+            print(rated_df)
+            print("csv file")
+            rated_df = rated_df.set_index('id')
+            print(rated_df)
+            print("Index is set")
+
+            similar_movies = pd.DataFrame()
+
+            print(similar_movies)
+
+            print("dataframe")
+            for movie,rating in rated_movies:
+                similar_movies = similar_movies.append(get_similar(movie,rating,corrMatrix),ignore_index = True)
+
+            similar_movies = similar_movies.sum().sort_values(ascending=False)
+            print("Heyyyy")
+            print(similar_movies)
+            print("Here i found the similar movies")
+            print("------------------------------------")
+            similar_movies = similar_movies.loc[~(similar_movies.index).isin(rated_df.index)]
+            print(similar_movies)
+
+            similar_movies =similar_movies.head(30)
+
+            similar_movies_dict = similar_movies.to_dict()
+            similar_movies_json = json.dumps(similar_movies_dict)
+            similar = json.loads(similar_movies_json)
+            print(similar)
+            print("Here similar is printed")
 
             resp["data"]=similar
 
@@ -478,6 +577,8 @@ def project_api_routes(endpoints):
     def get_similar(movie_name,rating,corrMatrix):
         similar_ratings = corrMatrix[movie_name]*(rating-2.5)
         similar_ratings = similar_ratings.sort_values(ascending=False)
+        print(similar_ratings)
+        print("This Working")
         return similar_ratings
 
     def get_poster_path(imdb_id):
