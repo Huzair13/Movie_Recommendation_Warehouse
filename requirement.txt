@@ -7,3 +7,5 @@ requests
 flask_pymongo
 dnspython
 pandas
+gunicorn==20.0.4
+jinja2==2.11.2
