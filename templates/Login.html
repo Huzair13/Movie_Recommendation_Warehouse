@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  </head>
+  <body>
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+      </div>
+    <div id="snackbar">Message here</div>
+    <div class="login-box">
+      <h1>Login</h1>
+      <form method="POST">
+        <div class="textbox">
+          <i class="fa fa-user"></i>
+          <input type="text" placeholder="Username" name="username" id="username" required>
+        </div>
+        <div class="textbox">
+          <i class="fa fa-lock"></i>
+          <input type="password" placeholder="Password" name="password" id="password" required>
+        </div>
+        <button type="button" class="btn" id="Signin">Sign in</button>
+      </form>
+      <div class="register-link-container">
+        <p>Don't have an account yet? <a href="{{ url_for('register') }}">SignUp here</a></p>
+      </div>
+    </div>
+    <div class="image-container">
+      <img src="{{ url_for('static', filename='images/movie.png') }}" alt="Image">
+    </div>
+
+    <div class="center-image">
+      <img src="{{ url_for('static', filename='images/reel3.png') }}" alt="Image">
+    </div>    
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
+  </body>
+</html>

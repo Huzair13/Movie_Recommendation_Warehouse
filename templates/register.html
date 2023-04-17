@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+  </head>
+  <body>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
+    <div id="snackbar">Message here</div>
+    <div class="login-box">
+      <h1>Login</h1>
+      <form method="POST">
+        <div class="textbox">
+          <i class="fa fa-user"></i>
+          <input type="text" placeholder="Username" name="username" id="username"required>
+        </div>
+        <div class="textbox">
+            <i class="fa fa-envelope"></i>
+            <input type="email" placeholder="email" name="email" id="email" required>
+          </div>
+        <div class="textbox">
+          <i class="fa fa-lock"></i>
+          <input type="password" placeholder="Password" name="password" id="password" required>
+        </div>
+        <div class="textbox">
+            <i class="fa fa-lock"></i>
+            <input type="cpassword" placeholder="Confirm Password" name="cpassword" id="cpassword" required>
+          </div>
+          <button type="button" class="btn" id="signup">Sign up</button>
+      </form>
+      <div class="register-link-container">
+        <p>Already have an account yet? <a href="{{ url_for('login') }}">SignIn here</a></p>
+      </div>
+    </div>
+    <div class="image-container">
+      <img src="{{ url_for('static', filename='images/movie.png') }}" alt="Image">
+      <!-- <img src="https://image.tmdb.org/t/p/w500/pYw10zrqfkdm3yD9JTO6vEGQhKy.jpg" alt="Image description"> -->
+    </div>
+
+    <div class="center-image">
+      <img src="{{ url_for('static', filename='images/reel3.png') }}" alt="Image">
+    </div>    
+    <script src="{{ url_for('static', filename='register.js') }}"></script>
+  </body>
+</html>
